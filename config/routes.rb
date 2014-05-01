@@ -1,8 +1,10 @@
 Narwhal::Application.routes.draw do
-  resources :users do
+  resources :users
 
-  post 'challenge' => 'users/challenge'
-  post 'authenticate' => 'users/authenticate'
+  root 'home#index'
+
+  post 'challenge' => 'users#challenge'
+  post 'authenticate' => 'users#authenticate'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

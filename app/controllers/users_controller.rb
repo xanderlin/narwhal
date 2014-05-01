@@ -26,7 +26,7 @@ class UsersController < ApplicationController
   # POST /challenge
   def challenge
     # generate and encode random string
-    @user = User.find(params[user_id])
+    @user = User.find_by_username(params[:username])
     r = SecureRandom.base64(1024)
     sessions[:attempted_user_id] = @user.id
     sessions[:random_challenge] = r
@@ -35,7 +35,7 @@ class UsersController < ApplicationController
     @r = r
 
     respond_to do |format|
-      format.json { render action: 'show', status: :created, location: @user }
+      format.js
     end    
   end
 

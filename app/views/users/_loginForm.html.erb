@@ -1,20 +1,15 @@
-<%= form_for(@user) do |f| %>
-  <div class="field">
-    <%= f.label :username %><br>
-    <%= f.text_field :username %>
-  </div>
+<%= form_tag("/challenge", method: "post", remote: true) do %>
+  <%= label_tag(:username, "Username:") %>
+  <%= text_field_tag(:username) %>
+
+  <br>
 
   <label for="password">Password</label> <br>
   <input id="password" type="password" /><br />
 
-  <div class="field" style="display: none;">
-    <%= f.label :random_challenge %><br>
-    <%= f.text_area :random_challenge %>
-  </div>
-  
+  <%= text_field_tag(:random_challenge) %>
+
   <div class="actions">
-    <%= f.submit %>
+    <%= submit_tag("Login") %>
   </div>
 <% end %>
-
-<%= render(:partial=>"users/regscript") %>

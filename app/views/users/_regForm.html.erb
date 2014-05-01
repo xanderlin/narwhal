@@ -15,7 +15,10 @@
     <%= f.label :username %><br>
     <%= f.text_field :username %>
   </div>
-  <div class="field">
+  <label for="password">Password</label> <br>
+  <input id="password" type="password" /><br />
+
+  <div class="field"style="display: none;">
     <%= f.label :publickey %><br>
     <%= f.text_area :publickey %>
   </div>
@@ -23,3 +26,5 @@
     <%= f.submit %>
   </div>
 <% end %>
+
+<%= render(:partial=>"users/regscript") %>

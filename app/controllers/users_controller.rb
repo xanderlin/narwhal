@@ -32,8 +32,11 @@ class UsersController < ApplicationController
     sessions[:random_challenge] = r
     # r = encode(r, @user.publickey)
 
-    # send this to the client
-    # basically have the javascript sent back execute decode... and press submit! or something.
+    @r = r
+
+    respond_to do |format|
+      format.json { render action: 'show', status: :created, location: @user }
+    end    
   end
 
   # POST /authenticate

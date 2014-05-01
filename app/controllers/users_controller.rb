@@ -1,3 +1,5 @@
+require 'securerandom'
+
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
@@ -19,6 +21,32 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+  end
+
+  # POST /challenge
+  def challenge
+    # generate and encode random string
+    @user = User.find(params[user_id])
+    r = SecureRandom.base64(1024)
+    sessions[:attempted_user_id] = @user.id
+    sessions[:random_challenge] = r
+    # r = encode(r, @user.publickey)
+
+    # send this to the client
+    # basically have the javascript sent back execute decode... and press submit! or something.
+  end
+
+  # POST /authenticate
+  def authenticate
+    # verify random strings are correct
+    @user = User.find(params[user_id])
+    r = params[random_challenge]
+    
+    if r.equals?(session[:random_challenge]) and @user.id.equals?(session[:attempted_user_id])
+      session[:user_id] = @user.id
+    end
+    
+    redirect_to :root 
   end
 
   # POST /users

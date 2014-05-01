@@ -1,0 +1,26 @@
+<script>
+
+
+//Returns the public key given the text of a password
+function generatePublicKey(password) {
+    return 3;
+}
+
+
+//Modifies the hidden public key field before submitting
+function addPublicKeyToForm(e) {
+    var passwordField = document.getElementById('password');
+    var publicKey = generatePublicKey(passwordField.value);
+    var publicKeyField = document.getElementById('user_publickey');
+    publicKeyField.value = publicKey;
+    return true;
+}
+
+
+var form = document.getElementById('new_user');
+if (form.attachEvent) {
+    form.attachEvent("submit", addPublicKeyToForm);
+} else {
+    form.addEventListener("submit", addPublicKeyToForm);
+}
+</script>

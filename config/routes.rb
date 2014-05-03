@@ -1,6 +1,12 @@
 Narwhal::Application.routes.draw do
   root 'home#index'
+
+  post 'users' => 'users#create'
   
+  patch 'users/:id' => 'users#update'
+  put 'users/:id' => 'users#update'
+  delete 'users/:id' => 'users#delete'
+
   get 'logout' => 'users#logout'
 
   post 'challenge' => 'users#challenge'

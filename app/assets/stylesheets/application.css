@@ -9,5 +9,31 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
+ *= require bootstrap.min
+ *= require rails_bootstrap_forms
  *= require_tree .
  */
+
+.main_page {
+    margin-left:auto;
+    margin-right:auto;
+    width:50%;
+}
+
+.youtube_video {
+    margin-left:auto;
+    margin-right:auto;
+    width:560;
+    height:315;
+    display:block;
+}
+
+#youtube_video{
+    width:100%;
+    text-align:center;
+}
+iframe {
+    width: 560px;
+    height: 315px;
+    margin: 0 auto;
+}

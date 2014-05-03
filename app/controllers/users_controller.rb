@@ -32,11 +32,11 @@ class UsersController < ApplicationController
   # POST /challenge
   def challenge
     # generate and encode random string
-    @user = User.find_by_username(params[:username])
+    user = User.find_by_username(params[:username])
     @r = SecureRandom.base64(100)
     # @r = encode(@r, @user.publickey)
 
-    session[:attempted_user_id] = @user.id
+    session[:attempted_user_id] = user.id
     session[:random_challenge] = @r
 
     respond_to :js
@@ -45,11 +45,11 @@ class UsersController < ApplicationController
   # POST /authenticate
   def authenticate
     # verify random strings are correct
-    @user = User.find_by_username(params[:username])
+    user = User.find_by_username(params[:username])
     r = params[:random_challenge]
     
-    if r == (session[:random_challenge]) and @user.id == (session[:attempted_user_id])
-      session[:user_id] = @user.id
+    if r == (session[:random_challenge]) and user.id == (session[:attempted_user_id])
+      session[:user_id] = user.id
     end
     
     redirect_to :root 

@@ -40,9 +40,9 @@ class UsersController < ApplicationController
   def authenticate
     # verify random strings are correct
     @user = User.find_by_username(params[:username])
-    r = params[random_challenge]
+    r = params[:random_challenge]
     
-    if r.equals?(session[:random_challenge]) and @user.id.equals?(session[:attempted_user_id])
+    if r == (session[:random_challenge]) and @user.id == (session[:attempted_user_id])
       session[:user_id] = @user.id
     end
     

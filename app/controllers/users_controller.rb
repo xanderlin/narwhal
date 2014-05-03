@@ -3,6 +3,7 @@ require 'securerandom'
 class UsersController < ApplicationController
   before_action :set_user, only: [:update, :destroy]
 
+  # GET /logout
   def logout
     session[:user_id] = nil
 
@@ -13,24 +14,42 @@ class UsersController < ApplicationController
   def challenge
     # generate and encode random string
     user = User.find_by_username(params[:username])
-    @r = SecureRandom.base64(100)
-    # @r = encode(@r, @user.publickey)
 
-    session[:attempted_user_id] = user.id
-    session[:random_challenge] = @r
+    r = SecureRandom.base64(100)
+
+    if not user.nil?
+      session[:attempted_user_id] = user.id
+      session[:random_challenge] = r
+    else
+      session[:attempted_user_id] = nil
+      session[:random_challenge] = nil
+    end
+
+    # r = encode(r, @user.publickey)
+    @r = r
 
     respond_to :js
   end
 
   # POST /authenticate
   def authenticate
-    # verify random strings are correct
-    user = User.find_by_username(params[:username])
+    # verify server ready to authenticate
+    scheck = session[:attempted_user_id] != nil and session[:random_challenge] != nil
+
+    # verify random string matches
+    u = User.find_by_username(params[:username])
+    ucheck = u != nil and u == session[:attempted_user_id]
+
     r = params[:random_challenge]
-    
-    if r == (session[:random_challenge]) and user.id == (session[:attempted_user_id])
-      session[:user_id] = user.id
+    rcheck = r == session[:random_challenge]
+
+    if scheck and ucheck and rcheck
+      session[:user_id] = u
     end
+
+    # reset these! one auth try per challenge
+    session[:attempted_user_id] = nil
+    session[:random_challenge] = nil
     
     redirect_to :root 
   end

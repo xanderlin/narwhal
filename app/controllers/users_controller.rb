@@ -27,22 +27,19 @@ class UsersController < ApplicationController
   def challenge
     # generate and encode random string
     @user = User.find_by_username(params[:username])
-    r = SecureRandom.base64(1024)
-    sessions[:attempted_user_id] = @user.id
-    sessions[:random_challenge] = r
-    # r = encode(r, @user.publickey)
+    @r = SecureRandom.base64(100)
+    # @r = encode(@r, @user.publickey)
 
-    @r = r
+    session[:attempted_user_id] = @user.id
+    session[:random_challenge] = @r
 
-    respond_to do |format|
-      format.js
-    end    
+    respond_to :js
   end
 
   # POST /authenticate
   def authenticate
     # verify random strings are correct
-    @user = User.find(params[user_id])
+    @user = User.find_by_username(params[:username])
     r = params[random_challenge]
     
     if r.equals?(session[:random_challenge]) and @user.id.equals?(session[:attempted_user_id])

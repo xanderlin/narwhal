@@ -1,12 +1,7 @@
 require 'securerandom'
 
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
-
-  # GET /users/1
-  # GET /users/1.json
-  def show
-  end
+  before_action :set_user, only: [:edit, :update, :destroy]
 
   # GET /users/new
   def new

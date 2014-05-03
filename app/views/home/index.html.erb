@@ -2,9 +2,8 @@
 <% if current_user %>
   <h1> Welcome <%=current_user.username%>.</h1>
 <% else %>
-  <h1> Welcome. Would you like to log in?</h1>
+  <h1> Welcome. Please log in or register.</h1>
 <% end %>
-
 
 <div id="youtube_video">
     <iframe width="560" height="315" src="//www.youtube.com/embed/ykwqXuMPsoc?rel=0" frameborder="0" allowfullscreen></iframe>
@@ -26,9 +25,9 @@
       <h3 class="panel-title">Register</h3>
     </div>
     <div class="panel-body">
-    <%= render 'users/regForm' %>
+      <%= render 'users/regForm' %>
+    </div>
   </div>
-</div>
 
 <% end %>
 

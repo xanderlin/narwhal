@@ -24,8 +24,6 @@ class UsersController < ApplicationController
       session[:attempted_user_id] = nil
       session[:random_challenge] = nil
     end
-
-    # r = encode(r, @user.publickey)
     @r = r
 
     respond_to :js
@@ -41,6 +39,7 @@ class UsersController < ApplicationController
     ucheck = u != nil and u == session[:attempted_user_id]
 
     r = params[:random_challenge]
+    r = decode(r, @user.publickey)
     rcheck = r == session[:random_challenge]
 
     if scheck and ucheck and rcheck
@@ -65,7 +64,7 @@ class UsersController < ApplicationController
         format.html { redirect_to :root, notice: 'User was successfully created.' }
         format.json { render action: 'show', status: :created, location: @user }
       else
-        format.html { render action: 'new' }
+        format.html { redirect_to :root }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end

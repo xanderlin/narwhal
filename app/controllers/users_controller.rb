@@ -25,8 +25,8 @@ class UsersController < ApplicationController
       session[:random_challenge] = nil
     end
 
+    # r = encode(r, @user.publickey)
     @r = r
-    # @r = encode(r, @user.publickey)
 
     respond_to :js
   end
@@ -45,10 +45,11 @@ class UsersController < ApplicationController
 
     if scheck and ucheck and rcheck
       session[:user_id] = u
-    else
-      session[:attempted_user_id] = nil
-      session[:random_challenge] = nil
     end
+
+    # reset these! one auth try per challenge
+    session[:attempted_user_id] = nil
+    session[:random_challenge] = nil
     
     redirect_to :root 
   end

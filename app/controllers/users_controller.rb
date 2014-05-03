@@ -1,4 +1,4 @@
-require 'securerandom'
+require 'openssl'
 
 class UsersController < ApplicationController
   before_action :set_user, only: [:update, :destroy]
@@ -10,44 +10,42 @@ class UsersController < ApplicationController
     redirect_to :root
   end
 
-  # POST /challenge
-  def challenge
-    # generate and encode random string
-    user = User.find_by_username(params[:username])
-
-    r = SecureRandom.base64(100)
-
-    if not user.nil?
-      session[:attempted_user_id] = user.id
-      session[:random_challenge] = r
-    else
-      session[:attempted_user_id] = nil
-      session[:random_challenge] = nil
-    end
-    @r = r
-
-    respond_to :js
-  end
-
   # POST /authenticate
   def authenticate
-    # verify server ready to authenticate
-    scheck = session[:attempted_user_id] != nil and session[:random_challenge] != nil
+    # verify random string originated from server
+    if session[:random_challenge] == nil
+      redirect_to :root
+      return
+    end
 
-    # verify random string matches
+    # 7. Clients sends username and (c,z)
     u = User.find_by_username(params[:username])
-    ucheck = u != nil and u == session[:attempted_user_id]
+    c = params[:c]
+    z = params[:z]
 
-    r = params[:random_challenge]
-    r = decode(r, @user.publickey)
-    rcheck = r == session[:random_challenge]
+    if u == nil or c.to_i.to_s != c or z.to_i.to_s != z
+      redirect_to :root
+      return
+    end
 
-    if scheck and ucheck and rcheck
+    a = session[:random_challenge].to_i
+    c = c.to_i
+    z = z.to_i
+    y = u.publickey.to_i
+    g = 3
+    p = 4074071952668972172536891376818756322102936787331872501272280898708762599526673412366794779
+
+    # 8. The server calculates T=Y^c g^z and verifies that c=H(Y,T1,a)
+    t = (modexp(y, c, p) * modexp(g, z, p)) % p
+
+    sha256 = Digest::SHA256.new
+    sha256.update("" + y.to_s + t.to_s + a.to_s + "")
+    digest = sha256.digest.to_i
+
+    if c == digest
       session[:user_id] = u
     end
 
-    # reset these! one auth try per challenge
-    session[:attempted_user_id] = nil
     session[:random_challenge] = nil
     
     redirect_to :root 
@@ -103,5 +101,10 @@ class UsersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
       params.require(:user).permit(:username, :publickey)
+    end
+
+    #checks g^u mod p
+    def modexp(g, u, p)
+      return g.to_bn.mod_exp(u, p)
     end
 end

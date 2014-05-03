@@ -1,8 +1,0 @@
-var challenge = "<%= @r %>";
-//challenge = encrypt(challenge, secretkey);
-$('#random_challenge').val(challenge);
-
-//change where this form points...
-$('#login_form').attr('action', '/authenticate');
-$('#login_form').removeAttr("data-remote");
-$('#login_form').removeData("remote");

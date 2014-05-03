@@ -3,13 +3,12 @@ Narwhal::Application.routes.draw do
 
   post 'users' => 'users#create'
   
-  patch 'users/:id' => 'users#update'
-  put 'users/:id' => 'users#update'
-  delete 'users/:id' => 'users#delete'
+  # patch 'users/:id' => 'users#update'
+  # put 'users/:id' => 'users#update'
+  # delete 'users/:id' => 'users#delete'
 
   get 'logout' => 'users#logout'
 
-  post 'challenge' => 'users#challenge'
   post 'authenticate' => 'users#authenticate'
 
   # The priority is based upon order of creation: first created -> highest priority.

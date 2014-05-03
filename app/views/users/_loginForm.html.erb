@@ -1,5 +1,6 @@
-<%= form_tag "/challenge", remote: true, id: "login_form" do %>
+<%= form_tag "/authenticate", id: "login_form" do %>
   <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+  <%= hidden_field_tag :a, @challenge %>
 
   <div class="form-group">
     <%= label_tag :username, "Username:", :class=>"control-label" %>
@@ -7,13 +8,19 @@
   </div>
 
   <div class="form-group">
-    <%= label_tag :username, "Password:", :class=>"control-label" %>
+    <%= label_tag :password, "Password:", :class=>"control-label" %>
     <input id="password" type="password" class="form-control" />
   </div>
 
   <div class="form-group">
-    <%= label_tag :username, "Challenge:", :class=>"control-label" %>
-    <%= text_field_tag :random_challenge, nil, :class=>"form-control" %>
+    <%= label_tag :c, "C:", :class=>"control-label" %>
+    <%= text_field_tag :c, nil, :class=>"form-control" %>
   </div>
+
+  <div class="form-group">
+    <%= label_tag :z, "Z:", :class=>"control-label" %>
+    <%= text_field_tag :z, nil, :class=>"form-control" %>
+  </div>
+
   <%= submit_tag "Login", :class=>'btn btn-primary' %>
 <% end %>

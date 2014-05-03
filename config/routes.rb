@@ -1,8 +1,10 @@
 Narwhal::Application.routes.draw do
-  resources :users
-
   root 'home#index'
 
+  resources :users
+
+  get 'logout' => 'users#logout'
+  
   post 'challenge' => 'users#challenge'
   post 'authenticate' => 'users#authenticate'
 

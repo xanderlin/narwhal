@@ -23,6 +23,12 @@ class UsersController < ApplicationController
   def edit
   end
 
+  def logout
+    session[:user_id] = nil
+
+    redirect_to :root
+  end
+
   # POST /challenge
   def challenge
     # generate and encode random string
@@ -56,7 +62,8 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
+        session[:user_id] = @user
+        format.html { redirect_to :root, notice: 'User was successfully created.' }
         format.json { render action: 'show', status: :created, location: @user }
       else
         format.html { render action: 'new' }

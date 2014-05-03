@@ -1,9 +1,15 @@
 <% if current_user %>
-<h1> Welcome <%=current_user.username%>.</h1>
+  <h1> Welcome <%=current_user.username%>.</h1>
 <% else %>
-<h1> Welcome. Would you like to log in?</h1>
+  <h1> Welcome. Would you like to log in?</h1>
 <% end %>
 
 <iframe width="560" height="315" src="//www.youtube.com/embed/ykwqXuMPsoc?rel=0" frameborder="0" allowfullscreen></iframe>
 
-<%= render 'users/loginForm' %>
+<br>
+
+<% if current_user %>
+  <a href = "/logout">Click here to logout. This doesn't actually work yet.</a>
+<% else %>
+  <%= render 'users/loginForm' %>
+<% end %>

@@ -1,16 +1,7 @@
 require 'securerandom'
 
 class UsersController < ApplicationController
-  before_action :set_user, only: [:edit, :update, :destroy]
-
-  # GET /users/new
-  def new
-    @user = User.new
-  end
-
-  # GET /users/1/edit
-  def edit
-  end
+  before_action :set_user, only: [:update, :destroy]
 
   def logout
     session[:user_id] = nil

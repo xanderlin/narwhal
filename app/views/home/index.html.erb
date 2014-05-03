@@ -11,5 +11,8 @@
 <% if current_user %>
   <a href = "/logout">Click here to logout.</a>
 <% else %>
+  <h2>Log In</h2>
   <%= render 'users/loginForm' %>
+  <h2>Register</h2>
+  <%= render 'users/regForm' %>
 <% end %>

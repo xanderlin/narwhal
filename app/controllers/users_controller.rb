@@ -12,17 +12,25 @@ class UsersController < ApplicationController
 
   # POST /authenticate
   def authenticate
-    # verify random string matches
-    u = User.find_by_username(params[:username])
-    
-    if u == nil
+    # verify random string originated from server
+    if session[:random_challenge] == nil
       redirect_to :root
+      return
     end
 
-    # 7. Clients sends (c,z)
+    # 7. Clients sends username and (c,z)
+    u = User.find_by_username(params[:username])
+    c = params[:c]
+    z = params[:z]
+
+    if u == nil or c.to_i.to_s != c or z.to_i.to_s != z
+      redirect_to :root
+      return
+    end
+
     a = session[:random_challenge].to_i
-    c = params[:c].to_i
-    z = params[:z].to_i
+    c = c.to_i
+    z = z.to_i
     y = u.publickey.to_i
     g = 3
     p = 4074071952668972172536891376818756322102936787331872501272280898708762599526673412366794779

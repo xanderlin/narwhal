@@ -4,7 +4,7 @@ class HomeController < ApplicationController
   def index
   	@user = User.new
 
-  	@challenge = SecureRandom.hex(30)
+  	@challenge = 2514315923
   	session[:random_challenge] = @challenge
   end
 end

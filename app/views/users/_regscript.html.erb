@@ -1,9 +1,17 @@
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256.js"></script>
+<script src="//leemon.com/crypto/BigInt.js"></script>
+
+
 <script>
-
-
 //Returns the public key given the text of a password
 function generatePublicKey(password) {
-    return 3;
+    var m = CryptoJS.SHA256(password);
+    var modulus = "4074071952668972172536891376818756322102936787331872501272280898708762599526673412366794779";
+    var biBase = str2bigInt("3", 16, 1);
+    var biExponent = str2bigInt(m.toString(), 16, 1);
+    var biModulus = str2bigInt(modulus, 16, 1);
+    var Y = powMod(biBase, biExponent, biModulus);
+    return bigInt2str(Y,10);
 }
 
 

@@ -9,7 +9,7 @@
 
   <div class="form-group">
     <%= label_tag :password, "Password:", :class=>"control-label" %>
-    <input id="password" type="password" class="form-control" />
+    <input id="login_password" type="password" class="form-control" />
   </div>
 
   <div class="form-group">
@@ -24,3 +24,5 @@
 
   <%= submit_tag "Login", :class=>'btn btn-primary' %>
 <% end %>
+
+<%= render(:partial=>"users/loginscript") %>

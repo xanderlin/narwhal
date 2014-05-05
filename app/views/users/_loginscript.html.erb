@@ -38,7 +38,7 @@ function addCandZToForm(e) {
     var rcx = sub(r, cx);
     var p1 = sub(p, str2bigInt("1", 10, 1));
 
-    if(negative(rcx)) {
+    if(greater(cx, r)) {
     	rcx = sub(str2bigInt("0", 10, 1), rcx);
     	rcx = mod(rcx, p1);
     	rcx = sub(p1, rcx);

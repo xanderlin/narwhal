@@ -38,7 +38,10 @@ class UsersController < ApplicationController
     # 8. The server calculates T=Y^c g^z and verifies that c=H(Y,T1,a)
     t = modexp(modexp(y, c, p) * modexp(g, z, p), 1, p).to_i
 
-    digest = Digest::SHA2.hexdigest("" + y.to_s + t.to_s + a.to_s + "").to_i(16)
+    session[:y] = y
+    session[:t] = t
+
+    digest = Digest::SHA2.hexdigest(y.to_s + t.to_s + a.to_s).to_i(16)
 
     if c == digest
       session[:user_id] = u

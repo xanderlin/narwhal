@@ -23,6 +23,7 @@ function addCandZToForm(e) {
     //x = H(password)
     var password = $("#login_password").val();
     var x = hash(password);
+    alert("x is " + bigInt2str(x, 10));
     //y = g^x
     var y = powMod(g, x, p);
     //r = random r
@@ -33,7 +34,21 @@ function addCandZToForm(e) {
     //c = H(y,t,a)
     var c = hash(bigInt2str(y, 10) + bigInt2str(t, 10) + bigInt2str(a, 10));
     //z = r - cx
-    var z = mod(sub(r, mult(c, x)), p);
+    var cx = mult(c, x);
+    var rcx = sub(r, cx);
+    var p1 = sub(p, str2bigInt("1", 10, 1));
+
+    if(negative(rcx)) {
+    	rcx = sub(str2bigInt("0", 10, 1), rcx);
+    	rcx = mod(rcx, p1);
+    	rcx = sub(p1, rcx);
+    }
+
+    alert("cx is " + bigInt2str(cx, 10));
+    alert("r-cx is " + bigInt2str(rcx, 10));
+    alert("p-1 is " + bigInt2str(p1, 10));
+
+    var z = mod(rcx, p1);
 
     $("#c").val(bigInt2str(c, 10));
     $("#z").val(bigInt2str(z, 10));

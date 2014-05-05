@@ -38,8 +38,10 @@ function addCandZToForm(e) {
     var rcx = sub(r, cx);
     var p1 = sub(p, str2bigInt("1", 10, 1));
 
+    //big int library makes 2's complement when subtraction
+    //but it doesn't process 2's complements properly
     if(greater(cx, r)) {
-    	rcx = sub(str2bigInt("0", 10, 1), rcx);
+    	rcx = sub(cx, r);
     	rcx = mod(rcx, p1);
     	rcx = sub(p1, rcx);
     }

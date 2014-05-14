@@ -1,4 +1,4 @@
-require 'openssl'
+require 'digest'
 
 class UsersController < ApplicationController
   before_action :set_user, only: [:update, :destroy]
@@ -23,10 +23,10 @@ class UsersController < ApplicationController
     c = params[:c]
     z = params[:z]
 
-    if u == nil or c.to_i.to_s != c or z.to_i.to_s != z
-      redirect_to :root
-      return
-    end
+    # if u == nil or c.to_i.to_s != c or z.to_i.to_s != z
+    #   redirect_to :root
+    #   return
+    # end
 
     a = session[:random_challenge].to_i
     c = c.to_i
@@ -36,11 +36,12 @@ class UsersController < ApplicationController
     p = 4074071952668972172536891376818756322102936787331872501272280898708762599526673412366794779
 
     # 8. The server calculates T=Y^c g^z and verifies that c=H(Y,T1,a)
-    t = (modexp(y, c, p) * modexp(g, z, p)) % p
+    t = modexp(modexp(y, c, p) * modexp(g, z, p), 1, p).to_i
 
-    sha256 = Digest::SHA256.new
-    sha256.update("" + y.to_s + t.to_s + a.to_s + "")
-    digest = sha256.digest.to_i
+    session[:y] = y
+    session[:t] = t
+
+    digest = Digest::SHA2.hexdigest(y.to_s + t.to_s + a.to_s).to_i(16)
 
     if c == digest
       session[:user_id] = u
@@ -48,7 +49,7 @@ class UsersController < ApplicationController
 
     session[:random_challenge] = nil
     
-    redirect_to :root 
+    redirect_to :root
   end
 
   # POST /users

@@ -1,0 +1,66 @@
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256.js"></script>
+<script src="//leemon.com/crypto/BigInt.js"></script>
+
+<script>
+
+$( document ).ready(function() {
+	$('#login_form').submit(addCandZToForm);
+});
+
+function addCandZToForm(e) {
+	if($("#c").val().length == 0 && $("#z").val().length == 0) {
+		e.preventDefault();
+	}
+
+	var a = $("#a").val();
+	var p = "4074071952668972172536891376818756322102936787331872501272280898708762599526673412366794779";
+	var g = "3";
+
+	a = str2bigInt(a, 10, 1);
+	p = str2bigInt(p, 10, 1);
+	g = str2bigInt(g, 10, 1);
+
+    //x = H(password)
+    var password = $("#login_password").val();
+    var x = hash(password);
+    alert("x is " + bigInt2str(x, 10));
+    //y = g^x
+    var y = powMod(g, x, p);
+    //r = random r
+    var r = "4001792063826874664034048593140014063261903086009356253642003708913117811303347196899779574468411655832694852606165223282116821267272036231141345553545603";
+    r = str2bigInt(r, 10, 1);
+    //t = g^r
+    var t = powMod(g, r, p);
+    //c = H(y,t,a)
+    var c = hash(bigInt2str(y, 10) + bigInt2str(t, 10) + bigInt2str(a, 10));
+    //z = r - cx
+    var cx = mult(c, x);
+    var rcx = sub(r, cx);
+    var p1 = sub(p, str2bigInt("1", 10, 1));
+
+    //big int library makes 2's complement when subtraction
+    //but it doesn't process 2's complements properly
+    if(greater(cx, r)) {
+    	rcx = sub(cx, r);
+    	rcx = mod(rcx, p1);
+    	rcx = sub(p1, rcx);
+    }
+
+    alert("cx is " + bigInt2str(cx, 10));
+    alert("r-cx is " + bigInt2str(rcx, 10));
+    alert("p-1 is " + bigInt2str(p1, 10));
+
+    var z = mod(rcx, p1);
+
+    $("#c").val(bigInt2str(c, 10));
+    $("#z").val(bigInt2str(z, 10));
+}
+
+//gets the SHA256 hash as a bigInt in base 10 of a string
+function hash(val) {
+	var m = CryptoJS.SHA256(val);
+    var hash = str2bigInt(m.toString(), 16, 1);
+    return hash;
+}
+
+</script>

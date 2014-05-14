@@ -4,8 +4,8 @@
 
 <script>
 //Returns the public key given the text of a password
-function generatePublicKey(password) {
-    var m = CryptoJS.SHA256(password);
+function generatePublicKey(password, sitename, username) {
+    var m = CryptoJS.SHA256(password + sitename + username);
     var modulus = "4074071952668972172536891376818756322102936787331872501272280898708762599526673412366794779";
     var biBase = str2bigInt("3", 10, 1);
     var biExponent = str2bigInt(m.toString(), 16, 1);
@@ -18,7 +18,8 @@ function generatePublicKey(password) {
 //Modifies the hidden public key field before submitting
 function addPublicKeyToForm(e) {
     var passwordField = document.getElementById('password2');
-    var publicKey = generatePublicKey(passwordField.value);
+    var usernameField = document.getElementById('user_username');
+    var publicKey = generatePublicKey(passwordField.value, "narwhal", username.value);
     var publicKeyField = document.getElementById('user_publickey');
     publicKeyField.value = publicKey;
     return true;

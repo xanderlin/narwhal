@@ -18,7 +18,7 @@ function generatePublicKey(password, sitename, username) {
 function addPublicKeyToForm(e) {
     var passwordField = document.getElementById('password2');
     var usernameField = document.getElementById('user_username');
-    var publicKey = generatePublicKey(passwordField.value, "narwhal", username.value);
+    var publicKey = generatePublicKey(passwordField.value, "narwhal", usernameField.value);
     var publicKeyField = document.getElementById('user_publickey');
     publicKeyField.value = publicKey;
     return true;
